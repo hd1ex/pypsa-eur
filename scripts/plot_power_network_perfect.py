@@ -101,7 +101,7 @@ def plot_map_perfect(
     line_upper_threshold = 1e4
     linewidth_factor = 2e3
     ac_color = "gray"
-    dc_color = "m"
+    dc_color = "magenta"
 
     line_width = n.lines.s_nom_opt
     link_width = n.links.p_nom_opt
