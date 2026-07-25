@@ -5701,8 +5701,12 @@ def remove_h2_network(n):
 
 
 def limit_individual_line_extension(n, maxext):
-    logger.info(f"Limiting new HVAC and HVDC extensions to {maxext} MW")
+    logger.info(f"Limiting new HVAC extensions to {maxext} MW")
     n.lines["s_nom_max"] = n.lines["s_nom"] + maxext
+
+
+def limit_individual_link_extension(n, maxext):
+    logger.info(f"Limiting new HVDC extensions to {maxext} MW")
     hvdc = n.links.index[n.links.carrier == "DC"]
     n.links.loc[hvdc, "p_nom_max"] = n.links.loc[hvdc, "p_nom"] + maxext
 
@@ -6593,6 +6597,10 @@ if __name__ == "__main__":
     maxext = snakemake.params["lines"]["max_extension"]
     if maxext is not None:
         limit_individual_line_extension(n, maxext)
+
+    maxext = snakemake.params["links"]["max_extension"]
+    if maxext is not None:
+        limit_individual_link_extension(n, maxext)
 
     if options["electricity_distribution_grid"]:
         insert_electricity_distribution_grid(
