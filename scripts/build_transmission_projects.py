@@ -331,7 +331,10 @@ def get_project_files(path, skip=[]):
     for file in files:
         df = pd.read_csv(file, index_col=0)
         df["geometry"] = df.apply(
-            lambda x: LineString([[x.x0, x.y0], [x.x1, x.y1]]), axis=1
+            lambda x: shapely.from_wkt(x.geometry)
+            if hasattr(x, "geometry")
+            else LineString([[x.x0, x.y0], [x.x1, x.y1]]),
+            axis=1,
         )
         df.drop(columns=["x0", "y0", "x1", "y1"], inplace=True)
         lines[file.stem] = df
